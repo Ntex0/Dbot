@@ -1,5 +1,5 @@
 # Ignore venv
-discordvenv/*
+venv/*
 
 # Ignore .env
 .env
