@@ -1,0 +1,7 @@
+# Ignore venv
+discordvenv/*
+
+# Ignore .env
+.env
+
+discord.log
