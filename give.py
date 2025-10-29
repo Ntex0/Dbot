@@ -1,4 +1,5 @@
 import discord
+import asyncio
 
 # ---- Category → Enchantment mapping ----
 ENCHANTMENT_CATEGORIES = {
@@ -98,6 +99,7 @@ class AddEnchantmentLevelModal(discord.ui.Modal, title="Set Enchantment level"):
                     break
                 else:
                     self.parent_view.enchantments.append(ench)
+                    break
         else:
             self.parent_view.enchantments.append(ench)
         await interaction.response.edit_message(content=self.parent_view.build_message_text(), view=self.parent_view)
@@ -111,6 +113,9 @@ class GiveItemView(discord.ui.View):
         # start with category selector
         self.category_select = CategorySelect(self)
         self.add_item(self.category_select)
+
+        # Add a future that will hold the result
+        self.future = asyncio.get_event_loop().create_future()
 
     def build_message_text(self):
         if not self.enchantments:
@@ -127,10 +132,13 @@ class GiveItemView(discord.ui.View):
         if self.enchantments:
             ench_nbt = f"enchantments={{{', '.join(f'{enchant}:{level}' for enchant, level in self.enchantments)}}}"
         
-        command = f'give @p minecraft:diamond_sword[{ench_nbt}] 1'
+        command = f'give copium_ingot minecraft:diamond_sword[{ench_nbt}] 1'
 
-        await interaction.response.send_message(f"Executing command:\n```{command}```")
-        self.command = command
+        # Set the result in the future
+        if not self.future.done():
+            self.future.set_result(command)
+        
+        await interaction.response.send_message(f"Executing command:\n```{command}```", ephemeral=True)
         self.stop()
 
     @discord.ui.button(label="Switch Enchantment Category", style=discord.ButtonStyle.secondary)
