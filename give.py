@@ -93,9 +93,6 @@ class AddEnchantmentLevelModal(discord.ui.Modal, title="Set Enchantment level"):
         # if enchantment already exists, update level
         if self.parent_view.enchantments:
             for i, (name, _) in enumerate(self.parent_view.enchantments):
-                print(name, self.enchantment_name)
-                print("MATCH" if name == self.enchantment_name else "NO MATCH")
-                print(self.parent_view.enchantments)
                 if name == self.enchantment_name:
                     self.parent_view.enchantments[i] = ench
                     break
@@ -127,11 +124,23 @@ class GiveItemView(discord.ui.View):
     async def submit(self, interaction: discord.Interaction, button: discord.ui.Button):
         ench_nbt = ""
         if self.enchantments:
-            ench_nbt = f"enchantments={{{','.join(f'{enchant}:{level}' for enchant, level in self.enchantments)}}}"
+            ench_nbt = f"enchantments={{{', '.join(f'{enchant}:{level}' for enchant, level in self.enchantments)}}}"
         command = f'give @p minecraft:diamond_sword[{ench_nbt}] 1'
 
         await interaction.response.send_message(f"Executing command:\n```{command}```")
-    '''
-    @discord.ui.button(label="Add Enchantment", style=discord.ButtonStyle.secondary)
-    async def add_enchantment_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_modal(AddEnchantmentModal(self))'''
+
+    @discord.ui.button(label="Switch Enchantment Category", style=discord.ButtonStyle.secondary)
+    async def switch_category(self, interaction: discord.Interaction, button: discord.ui.Button):
+        # Remove all EnchantmentSelect items
+        for child in list(self.children):
+            if isinstance(child, EnchantmentSelect):
+                self.remove_item(child)
+
+        # Add category select back
+        if not any(isinstance(child, CategorySelect) for child in self.children):
+            self.add_item(self.category_select)
+
+        await interaction.response.edit_message(
+            content="Select a category to change enchantments.",
+            view=self
+        )
