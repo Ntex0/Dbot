@@ -120,14 +120,18 @@ class GiveItemView(discord.ui.View):
                 f"- {name}: {level}" for name, level in self.enchantments)
         return f"**Selected Enchantments:**\n{enchants_display}"
 
+    # Complete the command and return the final give command
     @discord.ui.button(label="Continue", style=discord.ButtonStyle.primary)
     async def submit(self, interaction: discord.Interaction, button: discord.ui.Button):
         ench_nbt = ""
         if self.enchantments:
             ench_nbt = f"enchantments={{{', '.join(f'{enchant}:{level}' for enchant, level in self.enchantments)}}}"
+        
         command = f'give @p minecraft:diamond_sword[{ench_nbt}] 1'
 
         await interaction.response.send_message(f"Executing command:\n```{command}```")
+        self.command = command
+        self.stop()
 
     @discord.ui.button(label="Switch Enchantment Category", style=discord.ButtonStyle.secondary)
     async def switch_category(self, interaction: discord.Interaction, button: discord.ui.Button):
