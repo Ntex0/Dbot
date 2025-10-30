@@ -102,7 +102,26 @@ class AddEnchantmentLevelModal(discord.ui.Modal, title="Set Enchantment level"):
                     break
         else:
             self.parent_view.enchantments.append(ench)
-        await interaction.response.edit_message(content=self.parent_view.build_message_text(), view=self.parent_view)
+        await interaction.response.edit_message(content=self.parent_view.update_full_text(), view=self.parent_view)
+
+# --- Modal for parameters (target, amount, item_id) ---
+class SetParametersModal(discord.ui.Modal, title="Set Give Command Parameters"):
+    target_player = discord.ui.TextInput(
+        label="Target Player", placeholder="e.g. @p", default="@p")
+    amount = discord.ui.TextInput(
+        label="Amount", placeholder="e.g. 1", default="1")
+    item_id = discord.ui.TextInput(
+        label="Item ID", placeholder="e.g. diamond_sword", default="stick")
+
+    def __init__(self, parent_view):
+        super().__init__()
+        self.parent_view = parent_view
+
+    async def on_submit(self, interaction: discord.Interaction):
+        self.parent_view.target_player = self.target_player.value
+        self.parent_view.amount = int(self.amount.value)
+        self.parent_view.item_id = self.item_id.value
+        await interaction.response.edit_message(content=self.parent_view.update_full_text(), view=self.parent_view)
 
 # --- View for the give command ---
 class GiveItemView(discord.ui.View):
@@ -121,14 +140,24 @@ class GiveItemView(discord.ui.View):
         # Add a future that will hold the result
         self.future = asyncio.get_event_loop().create_future()
 
-    def build_message_text(self):
+    def update_enchant_text(self):
         if not self.enchantments:
             enchants_display = "No enchantments selected yet"
         else:
             enchants_display = "\n".join(
                 f"- {name}: {level}" for name, level in self.enchantments)
-        return f"**Selected Enchantments:**\n{enchants_display}"
-
+        return f"**Enchantments:**\n{enchants_display}"
+    
+    def update_param_text(self):
+        target = self.target_player if self.target_player else "@p"
+        amount = self.amount if self.amount else 1
+        item_id = self.item_id if self.item_id else "stick"
+        return f"**Parameters:**\n- Target Player: {target}\n- Amount: {amount}\n- Item ID: minecraft:{item_id}"
+    
+    def update_full_text(self):
+        return f"{'\n'.join(text for text in [self.update_param_text(), self.update_enchant_text()])}"
+        
+    
     # Complete the command and return the final give command
     @discord.ui.button(label="Submit", style=discord.ButtonStyle.green)
     async def submit(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -164,7 +193,7 @@ class GiveItemView(discord.ui.View):
 
     @discord.ui.button(label="Set parameters", style=discord.ButtonStyle.primary)
     async def set_parameters(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("Parameter setting not implemented yet.", ephemeral=True)
+        await interaction.response.send_modal(SetParametersModal(self))
     
     @discord.ui.button(label="Enter attributes", style=discord.ButtonStyle.primary)
     async def enter_attributes(self, interaction: discord.Interaction, button: discord.ui.Button):
