@@ -109,6 +109,10 @@ class GiveItemView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=300)
         self.enchantments = []
+        self.modifiers = []
+        self.target_player = None
+        self.amount = 1
+        self.item_id = None
         
         # start with category selector
         self.category_select = CategorySelect(self)
@@ -126,13 +130,30 @@ class GiveItemView(discord.ui.View):
         return f"**Selected Enchantments:**\n{enchants_display}"
 
     # Complete the command and return the final give command
-    @discord.ui.button(label="Continue", style=discord.ButtonStyle.primary)
+    @discord.ui.button(label="Submit", style=discord.ButtonStyle.green)
     async def submit(self, interaction: discord.Interaction, button: discord.ui.Button):
         ench_nbt = ""
+        modifiers_nbt = ""
+        target_nbt = "@p"
+        amount_nbt = 1
+        item_id_nbt = "minecraft:stick"
+        
+        if self.modifiers:
+            modifiers_nbt = f"attribute_modifiers=[{{{', '.join(f'type: {mod}, amount: {val}, operation: {op}, id: {uid}, slot: {slot}' for mod, val, op, uid, slot in self.modifiers)}}}]"
+        # attribute_modifiers=[{type:'step_height', amount:10.0, operation:'add_value', id:'example:custom_step_height', slot:'feet'}]
+        if self.item_id:
+            item_id_nbt = f"minecraft:{self.item_id}"
+        
         if self.enchantments:
             ench_nbt = f"enchantments={{{', '.join(f'{enchant}:{level}' for enchant, level in self.enchantments)}}}"
         
-        command = f'give copium_ingot minecraft:diamond_sword[{ench_nbt}] 1'
+        if self.amount != 1:
+            amount_nbt = self.amount
+        
+        # --------NBT CONSTRUCTION--------
+        attributes = [attr for attr in [modifiers_nbt, ench_nbt] if attr] # add attributes if exists
+        item_data = f"{item_id_nbt}[{', '.join(attributes)}]"
+        command = f"give {target_nbt} {item_id_nbt}[{', '.join(attributes)}] {amount_nbt}"
 
         # Set the result in the future
         if not self.future.done():
@@ -141,7 +162,14 @@ class GiveItemView(discord.ui.View):
         await interaction.response.send_message(f"Executing command:\n```{command}```", ephemeral=True)
         self.stop()
 
+    @discord.ui.button(label="Set parameters", style=discord.ButtonStyle.primary)
+    async def set_parameters(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_message("Parameter setting not implemented yet.", ephemeral=True)
     
+    @discord.ui.button(label="Enter attributes", style=discord.ButtonStyle.primary)
+    async def enter_attributes(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_message("Attribute entry not implemented yet.", ephemeral=True)
+        
     @discord.ui.button(label="Switch Enchantment Category", style=discord.ButtonStyle.secondary)
     async def switch_category(self, interaction: discord.Interaction, button: discord.ui.Button):
         # Remove all EnchantmentSelect items
@@ -162,5 +190,5 @@ class GiveItemView(discord.ui.View):
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
         if not self.future.done():
             self.future.set_result(None)
+        # delete the view
         await interaction.response.send_message("Give command cancelled.", ephemeral=True)
-        self.stop()
