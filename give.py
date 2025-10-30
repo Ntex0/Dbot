@@ -141,6 +141,7 @@ class GiveItemView(discord.ui.View):
         await interaction.response.send_message(f"Executing command:\n```{command}```", ephemeral=True)
         self.stop()
 
+    
     @discord.ui.button(label="Switch Enchantment Category", style=discord.ButtonStyle.secondary)
     async def switch_category(self, interaction: discord.Interaction, button: discord.ui.Button):
         # Remove all EnchantmentSelect items
@@ -156,3 +157,10 @@ class GiveItemView(discord.ui.View):
             content="Select a category to change enchantments.",
             view=self
         )
+
+    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.danger)
+    async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if not self.future.done():
+            self.future.set_result(None)
+        await interaction.response.send_message("Give command cancelled.", ephemeral=True)
+        self.stop()
