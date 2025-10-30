@@ -35,25 +35,24 @@ async def on_ready():
     except Exception as e:
         print(f"Error syncing commands: {e}")
 
-@bot.command(name="setip", help="Sets the IP address of the Minecraft server")
-async def set_ip(ctx, new_ip: str):
+@bot.tree.command(name="setip", description="Sets the IP address of the Minecraft server")
+async def set_ip(interaction, new_ip: str):
     global ip
     ip = new_ip
-    await ctx.send(f"IP address set to {ip}")
+    await interaction.response.send_message(f"IP address set to {ip}", ephemeral=True)
 
-@bot.command(name="getip", help="Gets the current IP address of the Minecraft server")
-async def get_ip(ctx):
-    await ctx.send(f"Current IP address is {ip}")
+@bot.tree.command(name="getip", description="Gets the current IP address of the Minecraft server")
+async def get_ip(interaction):
+    await interaction.response.send_message(f"Current IP address is {ip}", ephemeral=True)
+    
 
 @bot.tree.command(name="connect", description="Connects to the Minecraft server via RCON")
 async def connect(interaction):
     global mcr, rcon_connected
-    await interaction.response.defer(thinking=True)
     
     if rcon_connected:
-        await interaction.followup.send("Already connected to RCON.", ephemeral=True)
+        await interaction.response.send_message("Already connected to RCON.", ephemeral=True)
         return
-
     async def try_connect():
         global mcr, rcon_connected
         mcr = MCRcon(ip, rcon_password, port=rcon_port)
@@ -64,26 +63,38 @@ async def connect(interaction):
         rcon_connected = True
 
         response = mcr.command("list")
-        await interaction.followup.send(f"Connected successfully at: {ip}:{rcon_port}\n{response}")
+        await interaction.response.send_message(f"Connected successfully at: {ip}:{rcon_port}\n{response}", ephemeral=True)
 
     except asyncio.TimeoutError:
-        await interaction.followup.send("Connection timed out. Please check the IP address and RCON settings.")
+        await interaction.response.send_message("Connection timed out. Please check the IP address and RCON settings.", ephemeral=True)
 
     except Exception as e:
-        await interaction.followup.send(f"Error connecting via RCON: {e}", ephemeral=True)
+        await interaction.response.send_message(f"Error connecting via RCON: {e}", ephemeral=True)
 
-@bot.tree.command(name="disconect", description="Disconnects from the Minecraft server RCON")
+@bot.tree.command(name="disconnect", description="Disconnects from the Minecraft server RCON")
 async def disconnect(interaction):
-    await interaction.response.defer(thinking=True)
-    if rcon_connected is False:
-        await interaction.followup.send("Not connected to server.", ephemeral=True)
+    global mcr, rcon_connected
+    if not rcon_connected:
+        await interaction.response.send_message("Not connected to server.", ephemeral=True)
         return
 
     try:
         mcr.disconnect()
-        await interaction.followup.send("Disconnected from Server successfully.", ephemeral=True)
+        await interaction.response.send_message("Disconnected from Server successfully.", ephemeral=True)
+        rcon_connected = False
     except Exception as e:
-        await interaction.followup.send(f"Error disconnecting from RCON: {e}", ephemeral=True)
+        await interaction.response.send_message(f"Error disconnecting from RCON: {e}", ephemeral=True)
 
+@bot.tree.command(name="online", description="Lists all players currently online on the Minecraft server")
+async def list_players(interaction: discord.Interaction):
+    if rcon_connected is False:
+        await interaction.response.send_message("Not connected to server.", ephemeral=True)
+        return
+
+    try:
+        response = mcr.command("list")
+        await interaction.response.send_message(f"Online Players:\n{response}", ephemeral=True)
+    except Exception as e:
+        await interaction.response.send_message(f"Error retrieving player list: {e}", ephemeral=True)
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
