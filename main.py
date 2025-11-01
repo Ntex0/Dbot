@@ -43,11 +43,15 @@ async def set_ip(interaction, new_ip: str):
     bot.ip = new_ip
     await interaction.response.send_message(f"IP address set to {bot.ip}", ephemeral=True)
 
+    await asyncio.sleep(3)
+    await interaction.delete_original_response()
 
 @bot.tree.command(name="getip", description="Gets the current IP address of the Minecraft server")
 async def get_ip(interaction):
     await interaction.response.send_message(f"Current IP address is {bot.ip}", ephemeral=True)
-
+    
+    await asyncio.sleep(3)
+    await interaction.delete_original_response()
 
 @bot.tree.command(name="connect", description="Connects to the Minecraft server via RCON")
 async def connect(interaction):
@@ -71,6 +75,9 @@ async def connect(interaction):
 
     except Exception as e:
         await interaction.response.send_message(f"Error connecting via RCON: {e}", ephemeral=True)
+    
+    await asyncio.sleep(3)
+    await interaction.delete_original_response()
 
 
 @bot.tree.command(name="disconnect", description="Disconnects from the Minecraft server RCON")
@@ -86,6 +93,8 @@ async def disconnect(interaction):
     except Exception as e:
         await interaction.response.send_message(f"Error disconnecting from RCON: {e}", ephemeral=True)
 
+    await asyncio.sleep(3)
+    await interaction.delete_original_response()
 
 @bot.tree.command(name="online", description="Lists all players currently online on the Minecraft server")
 async def list_players(interaction: discord.Interaction):
@@ -99,10 +108,12 @@ async def list_players(interaction: discord.Interaction):
     except Exception as e:
         await interaction.response.send_message(f"Error retrieving player list: {e}", ephemeral=True)
 
+    await asyncio.sleep(3)
+    await interaction.delete_original_response()
 
 # Load command cogs
 async def load_cogs():
-    await bot.load_extension("commands.give_old")  # loads commands/give.py
+    await bot.load_extension("commands.give")  # loads commands/give.py
 
 asyncio.run(load_cogs())
 
