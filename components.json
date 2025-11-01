@@ -93,15 +93,16 @@
                         "oozing",
                         "infested",
                         "breath_of_the_nautilus"
-                    ]
+                    ],
+                    "optional": true
                 },
                 "amplifier": {
                     "type": "int",
-                    "optional": false
+                    "optional": true
                 },
                 "duration": {
                     "type": "int",
-                    "optional": false
+                    "optional": true
                 },
                 "ambient": {
                     "type": "bool",
@@ -115,7 +116,8 @@
                     "type": "bool",
                     "optional": true
                 }
-            }
+            },
+            "optional": true
         }
     },
     "components": {
@@ -127,7 +129,7 @@
                 "source": "https://minecraft.wiki/w/Attribute#Modifiers"
             },
             "fields": {
-                "attribute": {
+                "type": {
                     "type": "str",
                     "choices": [
                         "armor",
@@ -213,12 +215,15 @@
                                 "default",
                                 "hidden",
                                 "override"
-                            ]
+                            ],
+                            "optional": true
                         },
                         "value": {
                             "type": "object",
-                            "$ref": "#/_refs/text_component"
-                        }
+                            "$ref": "#/_refs/text_component",
+                            "optional": true
+                        },
+                        "optional": true
                     }
                 }
             }
@@ -243,17 +248,22 @@
                     "optional": true,
                     "fields": {
                         "type": {
-                            "type": "str"
+                            "type": "str",
+                            "optional": true
                         },
                         "base": {
-                            "type": "float"
+                            "type": "float",
+                            "optional": true
                         },
                         "factor": {
-                            "type": "float"
+                            "type": "float",
+                            "optional": true
                         },
                         "horizontal_blocking_angle": {
-                            "type": "float"
-                        }
+                            "type": "float",
+                            "optional": true
+                        },
+                        "optional": true
                     }
                 },
                 "item_damage": {
@@ -261,13 +271,16 @@
                     "optional": true,
                     "fields": {
                         "threshold": {
-                            "type": "float"
+                            "type": "float",
+                            "optional": true
                         },
                         "base": {
-                            "type": "float"
+                            "type": "float",
+                            "optional": true
                         },
                         "factor": {
-                            "type": "float"
+                            "type": "float",
+                            "optional": true
                         }
                     }
                 },
@@ -289,7 +302,8 @@
                     "type": "list",
                     "optional": true,
                     "fields": {
-                        "type": "str"
+                        "type": "str",
+                        "optional": true
                     }
                 }
             }
@@ -313,7 +327,7 @@
             "fields": {
                 "consume_seconds": {
                     "type": "float",
-                    "optional": false
+                    "optional": true
                 },
                 "animation": {
                     "type": "str",
@@ -330,7 +344,7 @@
                         "brush",
                         "bundle"
                     ],
-                    "optional": false
+                    "optional": true
                 },
                 "sound": {
                     "type": [
@@ -341,7 +355,7 @@
                 },
                 "has_consume_particles": {
                     "type": "bool",
-                    "optional": false
+                    "optional": true
                 },
                 "on_consume_effects": {
                     "type": "list",
@@ -357,11 +371,13 @@
                                     "clear_all_effects",
                                     "teleport_randomly",
                                     "play_sound"
-                                ]
+                                ],
+                                "optional": false
                             },
                             "effects": {
                                 "type": "list",
-                                "ref": "#/_refs/effects"
+                                "$ref": "#/_refs/effects",
+                                "optional": true
                             },
                             "amplifier": {
                                 "type": "int",
@@ -374,8 +390,10 @@
                             "probability": {
                                 "type": "float",
                                 "optional": true
-                            }
-                        }
+                            },
+                            "optional": true
+                        },
+                        "optional": true
                     }
                 }
             }
@@ -414,6 +432,7 @@
             "fields": {
                 "aqua_affinity": {
                     "type": "int",
+                    "optional": true,
                     "max": 2,
                     "metadata": {
                         "description": "Removes mining speed reduction underwater",
@@ -424,6 +443,7 @@
                 },
                 "bane_of_arthropods": {
                     "type": "int",
+                    "optional": true,
                     "max": 5,
                     "metadata": {
                         "description": "Increases damage vs arthropods and applies Slowness IV",
@@ -434,6 +454,7 @@
                 },
                 "blast_protection": {
                     "type": "int",
+                    "optional": true,
                     "max": 4,
                     "metadata": {
                         "description": "Reduces explosion damage",
@@ -444,6 +465,7 @@
                 },
                 "breach": {
                     "type": "int",
+                    "optional": true,
                     "max": 4,
                     "metadata": {
                         "description": "Reduces effectiveness of armor on the target",
@@ -454,6 +476,7 @@
                 },
                 "channeling": {
                     "type": "int",
+                    "optional": true,
                     "max": 1,
                     "metadata": {
                         "description": "Summons lightning when hitting with trident in thunderstorms",
@@ -464,6 +487,7 @@
                 },
                 "curse_of_binding": {
                     "type": "int",
+                    "optional": true,
                     "max": 1,
                     "metadata": {
                         "description": "Cannot remove items from armor slots",
@@ -474,6 +498,7 @@
                 },
                 "curse_of_vanishing": {
                     "type": "int",
+                    "optional": true,
                     "max": 1,
                     "metadata": {
                         "description": "Item disappears on death",
@@ -484,6 +509,7 @@
                 },
                 "density": {
                     "type": "int",
+                    "optional": true,
                     "max": 5,
                     "metadata": {
                         "description": "Increases damage of mace smash attack",
@@ -494,6 +520,7 @@
                 },
                 "depth_strider": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Reduces movement speed penalty in water",
@@ -504,6 +531,7 @@
                 },
                 "efficiency": {
                     "type": "int",
+                    "optional": true,
                     "max": 5,
                     "metadata": {
                         "description": "Increases mining speed",
@@ -517,6 +545,7 @@
                 },
                 "feather_falling": {
                     "type": "int",
+                    "optional": true,
                     "max": 4,
                     "metadata": {
                         "description": "Reduces fall damage",
@@ -527,6 +556,7 @@
                 },
                 "fire_aspect": {
                     "type": "int",
+                    "optional": true,
                     "max": 2,
                     "metadata": {
                         "description": "Sets target on fire",
@@ -537,6 +567,7 @@
                 },
                 "fire_protection": {
                     "type": "int",
+                    "optional": true,
                     "max": 4,
                     "metadata": {
                         "description": "Reduces fire damage",
@@ -547,6 +578,7 @@
                 },
                 "flame": {
                     "type": "int",
+                    "optional": true,
                     "max": 1,
                     "metadata": {
                         "description": "Arrows set target on fire",
@@ -557,6 +589,7 @@
                 },
                 "fortune": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Increases block drops",
@@ -569,6 +602,7 @@
                 },
                 "frost_walker": {
                     "type": "int",
+                    "optional": true,
                     "max": 2,
                     "metadata": {
                         "description": "Turns water into frosted ice beneath feet",
@@ -579,6 +613,7 @@
                 },
                 "impaling": {
                     "type": "int",
+                    "optional": true,
                     "max": 5,
                     "metadata": {
                         "description": "Increases damage vs aquatic mobs",
@@ -589,6 +624,7 @@
                 },
                 "infinity": {
                     "type": "int",
+                    "optional": true,
                     "max": 1,
                     "metadata": {
                         "description": "Prevents arrow consumption",
@@ -599,6 +635,7 @@
                 },
                 "knockback": {
                     "type": "int",
+                    "optional": true,
                     "max": 2,
                     "metadata": {
                         "description": "Increases melee knockback",
@@ -609,6 +646,7 @@
                 },
                 "looting": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Increases mob drops",
@@ -619,6 +657,7 @@
                 },
                 "loyalty": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Returns trident to owner",
@@ -629,6 +668,7 @@
                 },
                 "luck_of_the_sea": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Increases treasure from fishing",
@@ -639,6 +679,7 @@
                 },
                 "lunge": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Launches player horizontally with spear",
@@ -649,6 +690,7 @@
                 },
                 "lure": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Decreases fishing wait time",
@@ -659,6 +701,7 @@
                 },
                 "mending": {
                     "type": "int",
+                    "optional": true,
                     "max": 1,
                     "metadata": {
                         "description": "Repairs item using XP",
@@ -669,6 +712,7 @@
                 },
                 "multishot": {
                     "type": "int",
+                    "optional": true,
                     "max": 1,
                     "metadata": {
                         "description": "Fires 3 arrows, increases durability damage",
@@ -679,6 +723,7 @@
                 },
                 "piercing": {
                     "type": "int",
+                    "optional": true,
                     "max": 4,
                     "metadata": {
                         "description": "Arrows pierce entities",
@@ -689,6 +734,7 @@
                 },
                 "power": {
                     "type": "int",
+                    "optional": true,
                     "max": 5,
                     "metadata": {
                         "description": "Increases arrow damage",
@@ -699,6 +745,7 @@
                 },
                 "projectile_protection": {
                     "type": "int",
+                    "optional": true,
                     "max": 4,
                     "metadata": {
                         "description": "Reduces projectile damage",
@@ -709,6 +756,7 @@
                 },
                 "protection": {
                     "type": "int",
+                    "optional": true,
                     "max": 4,
                     "metadata": {
                         "description": "Reduces general damage",
@@ -719,6 +767,7 @@
                 },
                 "punch": {
                     "type": "int",
+                    "optional": true,
                     "max": 2,
                     "metadata": {
                         "description": "Increases arrow knockback",
@@ -729,6 +778,7 @@
                 },
                 "quick_charge": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Increases crossbow charge speed",
@@ -739,6 +789,7 @@
                 },
                 "respiration": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Extends underwater breathing",
@@ -749,6 +800,7 @@
                 },
                 "riptide": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Launches player using trident in water/rain",
@@ -759,6 +811,7 @@
                 },
                 "sharpness": {
                     "type": "int",
+                    "optional": true,
                     "max": 5,
                     "metadata": {
                         "description": "Increases melee damage",
@@ -770,6 +823,7 @@
                 },
                 "silk_touch": {
                     "type": "int",
+                    "optional": true,
                     "max": 1,
                     "metadata": {
                         "description": "Drops blocks themselves",
@@ -782,6 +836,7 @@
                 },
                 "smite": {
                     "type": "int",
+                    "optional": true,
                     "max": 5,
                     "metadata": {
                         "description": "Increases damage vs undead mobs",
@@ -792,6 +847,7 @@
                 },
                 "soul_speed": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Increases speed on soul sand/soil",
@@ -802,6 +858,7 @@
                 },
                 "sweeping_edge": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Increases sword sweep damage",
@@ -812,6 +869,7 @@
                 },
                 "swift_sneak": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Reduces movement speed penalty while sneaking",
@@ -822,6 +880,7 @@
                 },
                 "thorns": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Damages attackers randomly",
@@ -832,6 +891,7 @@
                 },
                 "unbreaking": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Chance to ignore durability loss",
@@ -842,6 +902,7 @@
                 },
                 "wind_burst": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Launches attacker upward with mace smash",
@@ -852,6 +913,7 @@
                 },
                 "cleaving": {
                     "type": "int",
+                    "optional": true,
                     "max": 3,
                     "metadata": {
                         "description": "Increases axe damage and shield stun",
@@ -880,7 +942,8 @@
                         "mainhand",
                         "offhand",
                         "saddle"
-                    ]
+                    ],
+                    "optional": false
                 },
                 "equip_sound": {
                     "type": [
@@ -1071,16 +1134,19 @@
                     "type": "list",
                     "fields": {
                         "name": {
-                            "type": "str"
+                            "type": "str",
+                            "optional": true
                         },
                         "value": {
-                            "type": "str"
+                            "type": "str",
+                            "optional": true
                         },
                         "signature": {
                             "type": "str",
                             "optional": true
                         }
-                    }
+                    },
+                    "optional": true
                 },
                 "texture": {
                     "type": "str",
@@ -1172,13 +1238,14 @@
             "fields": {
                 "hide_tooltip": {
                     "type": "bool",
-                    "optional": false
+                    "optional": true
                 },
                 "hidden_components": {
                     "type": "list",
                     "optional": true,
                     "fields": {
-                        "type": "str"
+                        "type": "str",
+                        "optional": true
                     }
                 }
             }
@@ -1188,10 +1255,12 @@
             "optional": true,
             "fields": {
                 "pattern": {
-                    "type": "str"
+                    "type": "str",
+                    "optional": false
                 },
                 "material": {
-                    "type": "str"
+                    "type": "str",
+                    "optional": false
                 }
             }
         },
@@ -1227,7 +1296,7 @@
                 },
                 "components": {
                     "type": "object",
-                    "ref": "root_components",
+                    "$ref": "#/components",
                     "optional": true
                 }
             },
@@ -1240,10 +1309,12 @@
             "optional": true,
             "fields": {
                 "item_damage_per_attack": {
-                    "type": "int"
+                    "type": "int",
+                    "optional": true
                 },
                 "disable_blocking_for_seconds": {
-                    "type": "float"
+                    "type": "float",
+                    "optional": true
                 }
             }
         }
