@@ -180,9 +180,9 @@ class GiveItemView(discord.ui.View):
             amount_nbt = self.amount
         
         # --------NBT CONSTRUCTION--------
-        attributes = [attr for attr in [modifiers_nbt, ench_nbt] if attr] # add attributes if exists
-        item_data = f"{item_id_nbt}[{', '.join(attributes)}]"
-        command = f"give {target_nbt} {item_id_nbt}[{', '.join(attributes)}] {amount_nbt}"
+        components = [attr for attr in [modifiers_nbt, ench_nbt] if attr] # add components if exists
+        item_data = f"{item_id_nbt}[{', '.join(components)}]"
+        command = f"give {target_nbt} {item_id_nbt}[{', '.join(components)}] {amount_nbt}"
 
         # Set the result in the future
         if not self.future.done():

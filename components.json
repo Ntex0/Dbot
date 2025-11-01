@@ -1,0 +1,1042 @@
+{
+    "attribute_modifiers": {
+        "type": "list",
+        "optional": true,
+        "metadata": {
+            "description": "List of attribute modifiers applied by the item when equipped/held.",
+            "source": "https://minecraft.wiki/w/Attribute#Modifiers"
+        },
+        "fields": {
+            "attribute": {
+                "type": "str",
+                "choices": [
+                    "armor",
+                    "armor_toughness",
+                    "attack_damage",
+                    "attack_knockback",
+                    "generic.attack_reach",
+                    "attack_speed",
+                    "block_break_speed",
+                    "block_interaction_range",
+                    "burning_time",
+                    "camera_distance",
+                    "entity_interaction_range",
+                    "explosion_knockback_resistance",
+                    "fall_damage_multiplier",
+                    "flying_speed",
+                    "follow_range",
+                    "gravity",
+                    "jump_strength",
+                    "knockback_resistance",
+                    "luck",
+                    "max_absorption",
+                    "max_health",
+                    "mining_efficiency",
+                    "movement_efficiency",
+                    "movement_speed",
+                    "oxygen_bonus",
+                    "safe_fall_distance",
+                    "scale",
+                    "spawn_reinforcements",
+                    "sneaking_speed",
+                    "step_height",
+                    "submerged_mining_speed",
+                    "sweeping_damage_ratio",
+                    "tempt_range",
+                    "water_movement_efficiency",
+                    "waypoint_receive_range",
+                    "waypoint_transmit_range"
+                ],
+                "metadata": {
+                    "description": "Attribute ID",
+                    "max": "see attribute maxima"
+                }
+            },
+            "slot": {
+                "type": "str",
+                "optional": true,
+                "choices": [
+                    "mainhand",
+                    "offhand",
+                    "head",
+                    "chest",
+                    "legs",
+                    "feet",
+                    "any"
+                ]
+            },
+            "id": {
+                "type": "str"
+            },
+            "amount": {
+                "type": "float"
+            },
+            "operation": {
+                "type": "str",
+                "choices": [
+                    "add_value",
+                    "add_multiplied_base",
+                    "add_multiplied_total"
+                ]
+            },
+            "display": {
+                "type": "object",
+                "optional": true,
+                "fields": {
+                    "type": {
+                        "type": "str",
+                        "choices": [
+                            "default",
+                            "hidden",
+                            "override"
+                        ]
+                    },
+                    "value": {
+                        "type": "object",
+                        "$ref": "#/text_component"
+                    }
+                }
+            }
+        }
+    },
+    "blocks_attacks": {
+        "type": "object",
+        "optional": true,
+        "metadata": {
+            "description": "Allows item to block attacks (shield-like behavior)."
+        },
+        "fields": {
+            "block_delay_seconds": {
+                "type": "float",
+                "optional": true
+            },
+            "disable_cooldown_scale": {
+                "type": "float",
+                "optional": true
+            },
+            "damage_reductions": {
+                "type": "list",
+                "optional": true,
+                "fields": {
+                    "type": {
+                        "type": "str"
+                    },
+                    "base": {
+                        "type": "float"
+                    },
+                    "factor": {
+                        "type": "float"
+                    },
+                    "horizontal_blocking_angle": {
+                        "type": "float"
+                    }
+                }
+            },
+            "item_damage": {
+                "type": "object",
+                "optional": true,
+                "fields": {
+                    "threshold": {
+                        "type": "float"
+                    },
+                    "base": {
+                        "type": "float"
+                    },
+                    "factor": {
+                        "type": "float"
+                    }
+                }
+            },
+            "block_sound": {
+                "type": [
+                    "str",
+                    "object"
+                ],
+                "optional": true
+            },
+            "disabled_sound": {
+                "type": [
+                    "str",
+                    "object"
+                ],
+                "optional": true
+            },
+            "bypassed_by": {
+                "type": "list",
+                "optional": true,
+                "fields": {
+                    "type": "str"
+                }
+            }
+        }
+    },
+    "break_sound": {
+        "type": [
+            "str",
+            "object"
+        ],
+        "optional": true,
+        "metadata": {
+            "description": "Sound event when item breaks"
+        }
+    },
+    "consumable": {
+        "type": "object",
+        "optional": true,
+        "metadata": {
+            "description": "Consumption behavior for food/potions"
+        },
+        "fields": {
+            "consume_seconds": {
+                "type": "float"
+            },
+            "animation": {
+                "type": "str",
+                "choices": [
+                    "none",
+                    "eat",
+                    "drink",
+                    "block",
+                    "bow",
+                    "spear",
+                    "crossbow",
+                    "spyglass",
+                    "toot_horn",
+                    "brush",
+                    "bundle"
+                ]
+            },
+            "sound": {
+                "type": [
+                    "str",
+                    "object"
+                ],
+                "optional": true
+            },
+            "has_consume_particles": {
+                "type": "bool"
+            },
+            "on_consume_effects": {
+                "type": "list",
+                "optional": true,
+                "fields": {
+                    "type": "object",
+                    "fields": {
+                        "type": {
+                            "type": "str",
+                            "choices": [
+                                "apply_effects",
+                                "remove_effects",
+                                "clear_all_effects",
+                                "teleport_randomly",
+                                "play_sound"
+                            ]
+                        },
+                        "effects": {
+                            "type": "list",
+                            "fields": {
+                                "id": {
+                                    "type": "str"
+                                },
+                                "amplifier":{
+                                    "type": "int"
+                                },
+                                "duration":{
+                                    "type": "int"
+                                },
+                                "ambient": {
+                                    "type": "bool",
+                                    "optional": true
+                                },
+                                "show_particles": {
+                                    "type": "bool",
+                                    "optional": true
+                                },
+                                "show_icon": {
+                                    "type": "bool",
+                                    "optional": true
+                                }
+
+                            }
+                        },
+                        "amplifier": {
+                            "type": "int",
+                            "optional": true
+                        },
+                        "duration_seconds": {
+                            "type": "int",
+                            "optional": true
+                        },
+                        "probability": {
+                            "type": "float",
+                            "optional": true
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "custom_name": {
+        "type": "object",
+        "$ref": "#/text_component",
+        "optional": true
+    },
+    "damage": {
+        "type": "int",
+        "optional": true
+    },
+    "enchantable": {
+        "type": "object",
+        "optional": true,
+        "fields": {
+            "value": {
+                "type": "int"
+            }
+        }
+    },
+    "enchantments": {
+        "type": "object",
+        "optional": true,
+        "metadata": {
+            "description": "Enchantments applied to an item."
+        },
+        "fields": {
+            "aqua_affinity": {
+                "type": "int",
+                "max": 2,
+                "metadata": {
+                    "description": "Removes mining speed reduction underwater",
+                    "applicable_items": [
+                        "Helmet"
+                    ]
+                }
+            },
+            "bane_of_arthropods": {
+                "type": "int",
+                "max": 5,
+                "metadata": {
+                    "description": "Increases damage vs arthropods and applies Slowness IV",
+                    "applicable_items": [
+                        "Swords"
+                    ]
+                }
+            },
+            "blast_protection": {
+                "type": "int",
+                "max": 4,
+                "metadata": {
+                    "description": "Reduces explosion damage",
+                    "applicable_items": [
+                        "Armor"
+                    ]
+                }
+            },
+            "breach": {
+                "type": "int",
+                "max": 4,
+                "metadata": {
+                    "description": "Reduces effectiveness of armor on the target",
+                    "applicable_items": [
+                        "Maces"
+                    ]
+                }
+            },
+            "channeling": {
+                "type": "int",
+                "max": 1,
+                "metadata": {
+                    "description": "Summons lightning when hitting with trident in thunderstorms",
+                    "applicable_items": [
+                        "Trident"
+                    ]
+                }
+            },
+            "curse_of_binding": {
+                "type": "int",
+                "max": 1,
+                "metadata": {
+                    "description": "Cannot remove items from armor slots",
+                    "applicable_items": [
+                        "Armor"
+                    ]
+                }
+            },
+            "curse_of_vanishing": {
+                "type": "int",
+                "max": 1,
+                "metadata": {
+                    "description": "Item disappears on death",
+                    "applicable_items": [
+                        "Any enchantable item"
+                    ]
+                }
+            },
+            "density": {
+                "type": "int",
+                "max": 5,
+                "metadata": {
+                    "description": "Increases damage of mace smash attack",
+                    "applicable_items": [
+                        "Maces"
+                    ]
+                }
+            },
+            "depth_strider": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Reduces movement speed penalty in water",
+                    "applicable_items": [
+                        "Boots"
+                    ]
+                }
+            },
+            "efficiency": {
+                "type": "int",
+                "max": 5,
+                "metadata": {
+                    "description": "Increases mining speed",
+                    "applicable_items": [
+                        "Pickaxe",
+                        "Shovel",
+                        "Axe",
+                        "Hoe"
+                    ]
+                }
+            },
+            "feather_falling": {
+                "type": "int",
+                "max": 4,
+                "metadata": {
+                    "description": "Reduces fall damage",
+                    "applicable_items": [
+                        "Boots"
+                    ]
+                }
+            },
+            "fire_aspect": {
+                "type": "int",
+                "max": 2,
+                "metadata": {
+                    "description": "Sets target on fire",
+                    "applicable_items": [
+                        "Swords"
+                    ]
+                }
+            },
+            "fire_protection": {
+                "type": "int",
+                "max": 4,
+                "metadata": {
+                    "description": "Reduces fire damage",
+                    "applicable_items": [
+                        "Armor"
+                    ]
+                }
+            },
+            "flame": {
+                "type": "int",
+                "max": 1,
+                "metadata": {
+                    "description": "Arrows set target on fire",
+                    "applicable_items": [
+                        "Bow"
+                    ]
+                }
+            },
+            "fortune": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Increases block drops",
+                    "applicable_items": [
+                        "Pickaxe",
+                        "Shovel",
+                        "Axe"
+                    ]
+                }
+            },
+            "frost_walker": {
+                "type": "int",
+                "max": 2,
+                "metadata": {
+                    "description": "Turns water into frosted ice beneath feet",
+                    "applicable_items": [
+                        "Boots"
+                    ]
+                }
+            },
+            "impaling": {
+                "type": "int",
+                "max": 5,
+                "metadata": {
+                    "description": "Increases damage vs aquatic mobs",
+                    "applicable_items": [
+                        "Trident"
+                    ]
+                }
+            },
+            "infinity": {
+                "type": "int",
+                "max": 1,
+                "metadata": {
+                    "description": "Prevents arrow consumption",
+                    "applicable_items": [
+                        "Bow"
+                    ]
+                }
+            },
+            "knockback": {
+                "type": "int",
+                "max": 2,
+                "metadata": {
+                    "description": "Increases melee knockback",
+                    "applicable_items": [
+                        "Swords"
+                    ]
+                }
+            },
+            "looting": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Increases mob drops",
+                    "applicable_items": [
+                        "Swords"
+                    ]
+                }
+            },
+            "loyalty": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Returns trident to owner",
+                    "applicable_items": [
+                        "Trident"
+                    ]
+                }
+            },
+            "luck_of_the_sea": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Increases treasure from fishing",
+                    "applicable_items": [
+                        "Fishing rod"
+                    ]
+                }
+            },
+            "lunge": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Launches player horizontally with spear",
+                    "applicable_items": [
+                        "Spear"
+                    ]
+                }
+            },
+            "lure": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Decreases fishing wait time",
+                    "applicable_items": [
+                        "Fishing rod"
+                    ]
+                }
+            },
+            "mending": {
+                "type": "int",
+                "max": 1,
+                "metadata": {
+                    "description": "Repairs item using XP",
+                    "applicable_items": [
+                        "All enchantable items"
+                    ]
+                }
+            },
+            "multishot": {
+                "type": "int",
+                "max": 1,
+                "metadata": {
+                    "description": "Fires 3 arrows, increases durability damage",
+                    "applicable_items": [
+                        "Crossbow"
+                    ]
+                }
+            },
+            "piercing": {
+                "type": "int",
+                "max": 4,
+                "metadata": {
+                    "description": "Arrows pierce entities",
+                    "applicable_items": [
+                        "Crossbow"
+                    ]
+                }
+            },
+            "power": {
+                "type": "int",
+                "max": 5,
+                "metadata": {
+                    "description": "Increases arrow damage",
+                    "applicable_items": [
+                        "Bow"
+                    ]
+                }
+            },
+            "projectile_protection": {
+                "type": "int",
+                "max": 4,
+                "metadata": {
+                    "description": "Reduces projectile damage",
+                    "applicable_items": [
+                        "Armor"
+                    ]
+                }
+            },
+            "protection": {
+                "type": "int",
+                "max": 4,
+                "metadata": {
+                    "description": "Reduces general damage",
+                    "applicable_items": [
+                        "Armor"
+                    ]
+                }
+            },
+            "punch": {
+                "type": "int",
+                "max": 2,
+                "metadata": {
+                    "description": "Increases arrow knockback",
+                    "applicable_items": [
+                        "Bow"
+                    ]
+                }
+            },
+            "quick_charge": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Increases crossbow charge speed",
+                    "applicable_items": [
+                        "Crossbow"
+                    ]
+                }
+            },
+            "respiration": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Extends underwater breathing",
+                    "applicable_items": [
+                        "Helmet"
+                    ]
+                }
+            },
+            "riptide": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Launches player using trident in water/rain",
+                    "applicable_items": [
+                        "Trident"
+                    ]
+                }
+            },
+            "sharpness": {
+                "type": "int",
+                "max": 5,
+                "metadata": {
+                    "description": "Increases melee damage",
+                    "applicable_items": [
+                        "Swords",
+                        "Axes"
+                    ]
+                }
+            },
+            "silk_touch": {
+                "type": "int",
+                "max": 1,
+                "metadata": {
+                    "description": "Drops blocks themselves",
+                    "applicable_items": [
+                        "Pickaxe",
+                        "Shovel",
+                        "Axe"
+                    ]
+                }
+            },
+            "smite": {
+                "type": "int",
+                "max": 5,
+                "metadata": {
+                    "description": "Increases damage vs undead mobs",
+                    "applicable_items": [
+                        "Swords"
+                    ]
+                }
+            },
+            "soul_speed": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Increases speed on soul sand/soil",
+                    "applicable_items": [
+                        "Boots"
+                    ]
+                }
+            },
+            "sweeping_edge": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Increases sword sweep damage",
+                    "applicable_items": [
+                        "Swords"
+                    ]
+                }
+            },
+            "swift_sneak": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Reduces movement speed penalty while sneaking",
+                    "applicable_items": [
+                        "Boots"
+                    ]
+                }
+            },
+            "thorns": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Damages attackers randomly",
+                    "applicable_items": [
+                        "Armor"
+                    ]
+                }
+            },
+            "unbreaking": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Chance to ignore durability loss",
+                    "applicable_items": [
+                        "All enchantable items"
+                    ]
+                }
+            },
+            "wind_burst": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Launches attacker upward with mace smash",
+                    "applicable_items": [
+                        "Maces"
+                    ]
+                }
+            },
+            "cleaving": {
+                "type": "int",
+                "max": 3,
+                "metadata": {
+                    "description": "Increases axe damage and shield stun",
+                    "applicable_items": [
+                        "Axes"
+                    ]
+                }
+            }
+        }
+    },
+    "equippable": {
+        "type": "object",
+        "optional": true,
+        "fields": {
+            "slot": {
+                "type": "str",
+                "choices": [
+                    "head",
+                    "chest",
+                    "legs",
+                    "feet",
+                    "body",
+                    "mainhand",
+                    "offhand",
+                    "saddle"
+                ]
+            },
+            "equip_sound": {
+                "type": [
+                    "str",
+                    "object"
+                ],
+                "optional": true
+            },
+            "asset_id": {
+                "type": "str",
+                "optional": true
+            },
+            "allowed_entities": {
+                "type": [
+                    "str",
+                    "list"
+                ],
+                "optional": true
+            },
+            "dispensable": {
+                "type": "bool",
+                "optional": true
+            },
+            "swappable": {
+                "type": "bool",
+                "optional": true
+            },
+            "damage_on_hurt": {
+                "type": "bool",
+                "optional": true
+            },
+            "equip_on_interact": {
+                "type": "bool",
+                "optional": true
+            },
+            "camera_overlay": {
+                "type": "str",
+                "optional": true
+            },
+            "can_be_sheared": {
+                "type": "bool",
+                "optional": true
+            },
+            "shearing_sound": {
+                "type": [
+                    "str",
+                    "object"
+                ],
+                "optional": true
+            }
+        }
+    },
+    "food": {
+        "type": "object",
+        "optional": true,
+        "metadata": {
+            "description": "Food properties for edible items"
+        },
+        "fields": {
+            "nutrition": {
+                "type": "int"
+            },
+            "saturation": {
+                "type": "float"
+            },
+            "can_always_eat": {
+                "type": "bool",
+                "optional": true
+            }
+        }
+    },
+    "glider": {
+        "type": "object",
+        "optional": true,
+        "metadata": {
+            "description": "Presence enables gliding"
+        }
+    },
+    "item_model": {
+        "type": "str",
+        "optional": true
+    },
+    "item_name": {
+        "type": "object",
+        "$ref": "#/text_component",
+        "optional": true
+    },
+    "lore": {
+        "type": "list",
+        "optional": true,
+        "fields": {
+            "$ref": "#/text_component"
+        }
+    },
+    "max_damage": {
+        "type": "int",
+        "optional": true
+    },
+    "max_stack_size": {
+        "type": "int",
+        "optional": true
+    },
+    "rarity": {
+        "type": "str",
+        "optional": true,
+        "choices": [
+            "common",
+            "uncommon",
+            "rare",
+            "epic"
+        ]
+    },
+    "repair_cost": {
+        "type": "int",
+        "optional": true
+    },
+    "repairable": {
+        "type": [
+            "str",
+            "list",
+            "object"
+        ],
+        "optional": true,
+        "fields": {
+            "items": {
+                "type": [
+                    "str",
+                    "list"
+                ],
+                "optional": true
+            }
+        }
+    },
+    "tool": {
+        "type": "object",
+        "optional": true,
+        "fields": {
+            "default_mining_speed": {
+                "type": "float",
+                "optional": true
+            },
+            "damage_per_block": {
+                "type": "int",
+                "optional": true
+            },
+            "can_destroy_blocks_in_creative": {
+                "type": "bool",
+                "optional": true
+            },
+            "rules": {
+                "type": "list",
+                "optional": true,
+                "fields": {
+                    "blocks": {
+                        "type": [
+                            "str",
+                            "list"
+                        ]
+                    },
+                    "speed": {
+                        "type": "float",
+                        "optional": true
+                    },
+                    "correct_for_drops": {
+                        "type": "bool",
+                        "optional": true
+                    }
+                }
+            }
+        }
+    },
+    "tooltip_display": {
+        "type": "object",
+        "optional": true,
+        "fields": {
+            "hide_tooltip": {
+                "type": "bool"
+            },
+            "hidden_components": {
+                "type": "list",
+                "fields": {
+                    "type": "str"
+                }
+            }
+        }
+    },
+    "trim": {
+        "type": "object",
+        "optional": true,
+        "fields": {
+            "pattern": {
+                "type": "str"
+            },
+            "material": {
+                "type": "str"
+            }
+        }
+    },
+    "unbreakable": {
+        "type": "object",
+        "optional": true
+    },
+    "use_cooldown": {
+        "type": "object",
+        "optional": true,
+        "fields": {
+            "seconds": {
+                "type": "float"
+            },
+            "cooldown_group": {
+                "type": "str",
+                "optional": true
+            }
+        }
+    },
+    "weapon": {
+        "type": "object",
+        "optional": true,
+        "fields": {
+            "item_damage_per_attack": {
+                "type": "int"
+            },
+            "disable_blocking_for_seconds": {
+                "type": "float"
+            }
+        }
+    },
+    "text_component": {
+        "type": "object",
+        "optional": true,
+        "fields": {
+            "text": {
+                "type": "str"
+            },
+            "color": {
+                "type": "str",
+                "optional": true
+            },
+            "font": {
+                "type": "str",
+                "optional": true,
+                "default": "minecraft:default"
+            },
+            "bold": {
+                "type": "bool",
+                "optional": true
+            },
+            "italic": {
+                "type": "bool",
+                "optional": true
+            },
+            "underlined": {
+                "type": "bool",
+                "optional": true
+            },
+            "strikethrough": {
+                "type": "bool",
+                "optional": true
+            },
+            "obfuscated": {
+                "type": "bool",
+                "optional": true
+            },
+            "shadow_color": {
+                "type": [
+                    "int",
+                    "list"
+                ],
+                "optional": true
+            }
+        }
+    }
+}
