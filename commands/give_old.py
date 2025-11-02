@@ -1,4 +1,6 @@
 import discord
+from discord import app_commands
+from discord.ext import commands
 import asyncio
 
 # ---- Category → Enchantment mapping ----
@@ -187,9 +189,9 @@ class GiveItemView(discord.ui.View):
         # Set the result in the future
         if not self.future.done():
             self.future.set_result(command)
-        
         await interaction.response.send_message(f"Executing command:\n```{command}```", ephemeral=True)
-        self.stop()
+        await asyncio.sleep(15)
+        await interaction.delete_original_response()
 
     @discord.ui.button(label="Set parameters", style=discord.ButtonStyle.primary)
     async def set_parameters(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -219,5 +221,47 @@ class GiveItemView(discord.ui.View):
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
         if not self.future.done():
             self.future.set_result(None)
-        # delete the view
-        await interaction.response.send_message("Give command cancelled.", ephemeral=True)
+        
+
+class Give(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        
+    @app_commands.command(name="give", description="Give a custom item to a player")
+    async def give_command(self, interaction: discord.Interaction):
+        view = GiveItemView()
+        await interaction.response.send_message(content="Pick enchantments and parameters", view=view, ephemeral=True)
+        try: 
+            command = await asyncio.wait_for(view.future, timeout=300)
+        except asyncio.TimeoutError:
+            await interaction.followup.send("timed out, no command generated", ephemeral=True)
+        if command is None:
+            # delete the view
+            msg = await interaction.followup.send("Give command cancelled.", ephemeral=True)
+            await asyncio.sleep(3)
+            await interaction.delete_original_response()
+            await msg.delete()
+            return
+        await interaction.delete_original_response()
+
+        if not self.bot.rcon_connected:
+            msg = await interaction.followup.send("Not connected to server", ephemeral=True)
+            await asyncio.sleep(3)
+            await msg.delete()
+            return
+        try:
+            response = self.bot.mcr.command(command)
+            msg = await interaction.followup.send(f"Successful: {response}", ephemeral=True)
+            await asyncio.sleep(3)
+            await msg.delete()
+        except Exception as e:
+            msg = await interaction.followup.send(f"Error: {e}", ephemeral=True)
+            await asyncio.sleep(3)
+            await msg.delete()
+        
+        await asyncio.sleep(3)
+        await interaction.delete_original_response()
+        await msg.delete()
+
+async def setup(bot):
+    await bot.add_cog(Give(bot))
