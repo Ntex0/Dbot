@@ -23,6 +23,7 @@ class Display(commands.Cog):
 
     @app_commands.command(name="server_members", description="Displays players on the server")
     async def display_online(self, interaction: discord.Interaction):
+        
         list_of_players = self.bot.mcr.command("list")
         parsed_list_players = list_of_players.split(": ")[1].strip()
         parsed_list_players = parsed_list_players.split(", ")
@@ -38,14 +39,13 @@ class Display(commands.Cog):
             
             embed.set_image(url=f"https://crafatar.com/avatars/{parsed_uuid}")
             await interaction.followup.send(embed=embed, ephemeral=False) # Sends embed out to the channel
-
+        
 cache_file =  os.path.join(ROOT, "cache", "player_cache.json")
 
 if not os.path.exists(cache_file):
-    with open(cache_file, "w") as cache:
-        cache.write("{}")
-
-cache = json.load(cache_file)
+    with open(cache_file, "w") as f:
+        f.write("{}")
+        cache = json.load(f)
 
 async def setup(bot):
     await bot.add_cog(Display(bot))
