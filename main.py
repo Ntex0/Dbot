@@ -123,7 +123,7 @@ async def list_players(interaction: discord.Interaction):
 if __name__ == "__main__":
     # Load command cogs
     async def load_cogs():
-        pass
+        await bot.load_extension("commands.give")
 
     asyncio.run(load_cogs())
 
