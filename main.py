@@ -8,8 +8,12 @@ import asyncio
 
 # load .env file
 load_dotenv()
+
 RCON_PASSWORD = os.getenv('rcon.password')
 RCON_PORT = int(str(os.getenv('rcon.port')))
+
+# set project root path
+ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # get environmental variables
 token = os.getenv('TOKEN')
