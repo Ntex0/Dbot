@@ -9,11 +9,12 @@ import asyncio
 # load .env file
 load_dotenv()
 RCON_PASSWORD = os.getenv('rcon.password')
-RCON_PORT = int(os.getenv('rcon.port'))
-
+RCON_PORT = int(str(os.getenv('rcon.port')))
 
 # get environmental variables
 token = os.getenv('TOKEN')
+if token is None:
+    raise ValueError("Token not found")
 
 handler = logging.FileHandler(
     filename='discord.log', encoding='utf-8', mode='w')
@@ -22,10 +23,14 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
-bot = commands.Bot(command_prefix='!', intents=intents)
-bot.mcr = None
-bot.rcon_connected = False
-bot.ip = "localhost"
+class Dbot(commands.Bot):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.mcr = None
+        self.rcon_connected = False
+        self.ip = "localhost"
+
+bot = Dbot(command_prefix='!', intents=intents)
 
 
 @bot.event
@@ -59,15 +64,15 @@ async def connect(interaction):
         await interaction.response.send_message("Already connected to RCON.", ephemeral=True)
         return
 
-    async def try_connect():
+    async def try_connect(bot):
         bot.mcr = MCRcon(bot.ip, RCON_PASSWORD, port=RCON_PORT)
         bot.mcr.connect()
 
     try:
-        await asyncio.wait_for(try_connect(), timeout=5)
+        await asyncio.wait_for(try_connect(bot), timeout=5)
         bot.rcon_connected = True
 
-        response = bot.mcr.command("list")
+        response = bot.mcr.command("list") # type: ignore
         await interaction.response.send_message(f"Connected successfully at: {bot.ip}:{RCON_PORT}\n{response}", ephemeral=True)
 
     except asyncio.TimeoutError:
@@ -87,7 +92,7 @@ async def disconnect(interaction):
         return
 
     try:
-        bot.mcr.disconnect()
+        bot.mcr.disconnect() # type: ignore
         await interaction.response.send_message("Disconnected from Server successfully.", ephemeral=True)
         bot.rcon_connected = False
     except Exception as e:
@@ -103,7 +108,7 @@ async def list_players(interaction: discord.Interaction):
         return
 
     try:
-        response = bot.mcr.command("list")
+        response = bot.mcr.command("list")  # type: ignore
         await interaction.response.send_message(f"Online Players:\n{response}", ephemeral=True)
     except Exception as e:
         await interaction.response.send_message(f"Error retrieving player list: {e}", ephemeral=True)
@@ -113,7 +118,7 @@ async def list_players(interaction: discord.Interaction):
 
 # Load command cogs
 async def load_cogs():
-    await bot.load_extension("commands.give")  # loads commands/give.py
+    pass
 
 asyncio.run(load_cogs())
 
