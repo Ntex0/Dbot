@@ -120,10 +120,11 @@ async def list_players(interaction: discord.Interaction):
     await asyncio.sleep(3)
     await interaction.delete_original_response()
 
-# Load command cogs
-async def load_cogs():
-    pass
+if __name__ == "__main__":
+    # Load command cogs
+    async def load_cogs():
+        pass
 
-asyncio.run(load_cogs())
+    asyncio.run(load_cogs())
 
-bot.run(token, log_handler=handler, log_level=logging.DEBUG)
+    bot.run(token, log_handler=handler, log_level=logging.DEBUG)
