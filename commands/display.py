@@ -13,15 +13,8 @@ def PlayerUUID(player_name, cache):
     if response.status_code == 200:
         data_to_parse = response.json() # json file to be parsed for uuid
         player__uuid = data_to_parse.get("id")
-        print(player__uuid)
-
-def GetPlayerHead(player_uuid):
-
-    head_url = f"https://crafatar.com/avatars/{player.uuid}"
-    response = requests.get(head_url)
-    if response.status_code == 200:
-        pass 
-
+        return player__uuid
+    raise ValueError("Player not Found remember commands only work for premium minecraft accounts!")
 
 class Display(commands.Cog):
 
@@ -37,8 +30,14 @@ class Display(commands.Cog):
         for player_name in parsed_list_players:
             player_name = player_name.strip()
             parsed_uuid = PlayerUUID(player_name) # Helper function which grabs our players UUID
-            GetPlayerHead(parsed_uuid) # Helper function that then gets our players head image link 
-            await interaction.followup.send(f"Player is {player_name}")
+            embed = discord.Embed(
+                        title=f"{player_name}", # sets title of the embed to be player name
+                        description=f"{player_name} is online!", # sets description of our embed
+                        color=discord.Color.Purple() # sets color of our embed
+             )
+            
+            embed.set_image(url=f"https://crafatar.com/avatars/{parsed_uuid}")
+            await interaction.followup.send(embed=embed, ephemeral=False) # Sends embed out to the channel
 
 cache_file =  os.path.join(ROOT, "cache", "player_cache.json")
 
