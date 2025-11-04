@@ -7,7 +7,7 @@ import os
 from main import ROOT
 
 
-def PlayerUUID(player_name, cache):
+def PlayerUUID(player_name):
     uuid_api_url = f"https://api.mojang.com/users/profiles/minecraft/{player_name}" # accesses minecraft api to get uid to pass to other api for images
     response = requests.get(uuid_api_url)
     if response.status_code == 200:
@@ -29,23 +29,33 @@ class Display(commands.Cog):
         parsed_list_players = parsed_list_players.split(", ")
         await interaction.response.send_message(list_of_players, ephemeral=True)
         for player_name in parsed_list_players:
+            player_health = self.bot.mcr.command(f"data get entity {player_name} Health") # Gets our player health via rcon command
+            player_hunger = self.bot.mcr.command(f"data get entity {player_name} foodLevel") # gets our player hunger via rcon command
+            print(player_hunger)
+            player_hunger = int(player_hunger.split(": ")[1].strip())
+            player_health = float(player_health.split(": ")[1].strip().replace("f", ""))
+            print(player_health)
             player_name = player_name.strip()
             parsed_uuid = PlayerUUID(player_name) # Helper function which grabs our players UUID
+            if not parsed_uuid:
+                await interaction.followup.send(f"Player data invalid for {player_name}", ephemeral=True)
+                continue
             embed = discord.Embed(
                         title=f"{player_name}", # sets title of the embed to be player name
-                        description=f"{player_name} is online!", # sets description of our embed
-                        color=discord.Color.Purple() # sets color of our embed
+                        description=f"❤️: {player_health:.2f}/20.00\n🍖: {player_hunger:.2f}/20.00", # sets description of our embed
+                        color=discord.Color.purple() # sets color of our embed
              )
             
-            embed.set_image(url=f"https://crafatar.com/avatars/{parsed_uuid}")
+            embed.set_image(url=f"https://mc-heads.net/avatar/{parsed_uuid}/50.png")
+            print(f"https://crafatar.com/avatars/{parsed_uuid}")
             await interaction.followup.send(embed=embed, ephemeral=False) # Sends embed out to the channel
         
-cache_file =  os.path.join(ROOT, "cache", "player_cache.json")
+#cache_file =  os.path.join(ROOT, "cache", "player_cache.json")
 
-if not os.path.exists(cache_file):
-    with open(cache_file, "w") as f:
-        f.write("{}")
-        cache = json.load(f)
+#if not os.path.exists(cache_file):
+    #with open(cache_file, "w") as f:
+        #f.write("{}")
+        #cache = json.load(f)
 
 async def setup(bot):
     await bot.add_cog(Display(bot))
