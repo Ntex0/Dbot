@@ -5,17 +5,10 @@ import json
 from discord import app_commands
 import os
 from main import ROOT
-from uuid import UUIDDictionary
+import cache.uuid_cache as UUIDDictionary
 
-def load_dictionary(filename="cache/uuid_dictionary.json"):
-    try:
-        with open(filename, "r") as f:
-            data = json.load(f)
-            return data
-    except FileNotFoundError:
-        return {}
 
-UUIDDictionary = load_dictionary()
+cache_dict = UUIDDictionary.load_dictionary()
 
 
 def PlayerUUID(player_name):
@@ -46,9 +39,13 @@ class Display(commands.Cog):
             player_hunger = int(player_hunger.split(": ")[1].strip())
             player_health = float(player_health.split(": ")[1].strip().replace("f", ""))
             player_name = player_name.strip()
-            if player_name not in UUIDDictionary:
+            if player_name not in cache_dict:
+                parsed_uuid = PlayerUUID(player_name)
+                cache_dict[player_name] = parsed_uuid
+                UUIDDictionary.save_uuid_dictionary(cache_dict)
+            else:
+                parsed_uuid = cache_dict[player_name]
 
-            parsed_uuid = PlayerUUID(player_name) # Helper function which grabs our players UUID
             if not parsed_uuid:
                 await interaction.followup.send(f"Player data invalid for {player_name}", ephemeral=True)
                 continue
