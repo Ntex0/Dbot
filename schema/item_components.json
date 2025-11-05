@@ -135,13 +135,6 @@
                                     "obfuscated": {
                                         "type": "bool",
                                         "optional": true
-                                    },
-                                    "shadow_color": {
-                                        "type": [
-                                            "int",
-                                            "list"
-                                        ],
-                                        "optional": true
                                     }
                                 },
                                 "optional": true
@@ -1331,56 +1324,10 @@
                 "optional": true
             },
             "profile": {
-                "type": [
-                    "str",
-                    "object"
-                ],
+                "type": "str",
                 "optional": true,
                 "metadata": {
-                    "description": "Information about the owner of this player head. If defined as a string, corresponds to [str] name"
-                },
-                "fields": {
-                    "name": {
-                        "type": "str",
-                        "optional": true
-                    },
-                    "id": {
-                        "type": "long",
-                        "metadata": {
-                            "description": "UUID of the player in long format"
-                        },
-                        "optional": true
-                    },
-                    "properties": {
-                        "type": "list",
-                        "fields": {
-                            "name": {
-                                "type": "str",
-                                "optional": true
-                            },
-                            "value": {
-                                "type": "str",
-                                "optional": true
-                            },
-                            "signature": {
-                                "type": "str",
-                                "optional": true
-                            }
-                        },
-                        "optional": true
-                    },
-                    "texture": {
-                        "type": "str",
-                        "optional": true
-                    },
-                    "cape": {
-                        "type": "str",
-                        "optional": true
-                    },
-                    "model": {
-                        "type": "str",
-                        "optional": true
-                    }
+                    "description": "Information about the owner of this player head"
                 }
             },
             "rarity": {
