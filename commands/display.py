@@ -22,6 +22,7 @@ class Display(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name="server_members", description="Displays players on the server")
+    @app_commands.checks.cooldown(1, 60, key=lambda i: (i.guild.id, i.user.id)) # addds 1 minute cooldown per user per guild
     async def display_online(self, interaction: discord.Interaction):
         
         list_of_players = self.bot.mcr.command("list")
@@ -31,10 +32,8 @@ class Display(commands.Cog):
         for player_name in parsed_list_players:
             player_health = self.bot.mcr.command(f"data get entity {player_name} Health") # Gets our player health via rcon command
             player_hunger = self.bot.mcr.command(f"data get entity {player_name} foodLevel") # gets our player hunger via rcon command
-            print(player_hunger)
             player_hunger = int(player_hunger.split(": ")[1].strip())
             player_health = float(player_health.split(": ")[1].strip().replace("f", ""))
-            print(player_health)
             player_name = player_name.strip()
             parsed_uuid = PlayerUUID(player_name) # Helper function which grabs our players UUID
             if not parsed_uuid:
@@ -42,13 +41,20 @@ class Display(commands.Cog):
                 continue
             embed = discord.Embed(
                         title=f"{player_name}", # sets title of the embed to be player name
-                        description=f"❤️: {player_health:.2f}/20.00\n🍖: {player_hunger:.2f}/20.00", # sets description of our embed
+                        description=f"❤️: {player_health:.0f}/20\n🍖: {player_hunger:.0f}/20", # sets description of our embed
                         color=discord.Color.purple() # sets color of our embed
              )
             
             embed.set_image(url=f"https://mc-heads.net/avatar/{parsed_uuid}/50.png")
             print(f"https://crafatar.com/avatars/{parsed_uuid}")
             await interaction.followup.send(embed=embed, ephemeral=False) # Sends embed out to the channel
+    @display_online.error # adds cooldown to our command display
+    async def display_online_error(self, interaction: discord.Interaction, error: app_commands.AppCommandError):
+        if isinstance(error, app_commands.CommandOnCooldown):
+            await interaction.response.send_message(str(error), ephemeral=True)
+
+        
+            
         
 #cache_file =  os.path.join(ROOT, "cache", "player_cache.json")
 
