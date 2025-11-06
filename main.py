@@ -124,7 +124,12 @@ if __name__ == "__main__":
     # Load command cogs
     async def load_cogs():
         pass
-
+    
+    # if cache folder does not exist in user directory, create it
+    if not os.path.exists(os.path.join(ROOT, "cache")):
+        os.mkdir(os.path.join(ROOT, "cache"))
+    
+    
     asyncio.run(load_cogs())
 
     bot.run(token, log_handler=handler, log_level=logging.DEBUG)
