@@ -1,0 +1,9 @@
+# Ignore venv
+venv/
+.git/
+
+# Ignore .env
+.env
+
+discord.log
+__pycache__/
