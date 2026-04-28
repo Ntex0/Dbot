@@ -1,0 +1,23 @@
+{
+  "name": "dbot",
+  "version": "1.0.0",
+  "description": "Discord bot to manage Minecraft server events",
+  "homepage": "https://github.com/Ntex0/Dbot#readme",
+  "bugs": {
+    "url": "https://github.com/Ntex0/Dbot/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ntex0/Dbot.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "discord.js": "^14.26.3"
+  }
+}
